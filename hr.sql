@@ -14,6 +14,10 @@ SELECT user_id, username
 FROM all_users
 WHERE username = 'HR';
 
+SELECT user_id, username
+FROM all_users
+WHERE username = 'joeun';
+
 -- # 기본 계정 생성 하기
 ALTER SESSION SET "_ORACLE_SCRIPT" = TRUE;
 CREATE USER HR IDENTIFIED BY 123456;
@@ -21,6 +25,13 @@ ALTER USER HR DEFAULT TABLESPACE users;
 ALTER USER HR QUOTA UNLIMITED ON users;
 GRANT connect, resource to HR;
 
+-- # joeun 계정 생성 하기
+ALTER SESSION SET "_ORACLE_SCRIPT" = TRUE;
+CREATE USER joeun IDENTIFIED BY 123456; -- 계정생성
+ALTER USER joeun DEFAULT TABLESPACE users; -- 테이블스페이스 부여
+ALTER USER joeun QUOTA UNLIMITED ON users; -- 용량설정
+GRANT connect, resource to joeun; -- connect, resource 권한 부여
+GRANT DBA TO joeun;
 
 -------------------------------------- 3.
 -- 테이블 EMPLOYEES 의 테이블 구조를 조회하는 SQL 문을 작성하시오.
@@ -395,9 +406,9 @@ FROM dual;
 
 -------------------------------------- 34.
 -- LPAD(문자열,칸의 수,채울 문자) 
--- : 문자열에 지정한 칸을 확보하고, 왼쪽에 특정 문자로 채움
+-- : 문자열에 지정한 칸(byte)을 확보하고, 왼쪽에 특정 문자로 채움
 -- RPAD(문자열,칸의 수,채울 문자) 
--- : 문자열에 지정한 칸을 확보하고, 오른쪽에 특정 문자로 채움
+-- : 문자열에 지정한 칸(byte)을 확보하고, 오른쪽에 특정 문자로 채움
 
 -- <예시>와 같이 대상 문자열을 왼쪽/오른쪽에 출력하고 빈공간을 특정 문자로 채우는 SQL문을 작성하시오.
 -- <예시>
@@ -545,6 +556,7 @@ FROM dual;
 -------------------------------------- 43.
 -- LAST_DAY(날짜)
 -- : 지정한 날짜와 동일한 월의 월말 일자를 반환하는 함수
+-- : 날짜형 데이터는 연,월,일 기준으로 절삭가능
 -- 날짜 : XXXX.YYYYYY
 -- 1970년01월01일 00시00분00초00ms -> 현재 날짜 시간
 -- 지난 일자를 정수로 계산, 시간정보는 소수부분으로 계산
@@ -662,7 +674,8 @@ FROM employees;
 -- Valli        IT
 -- 한 줄 복사 : ctrl + shift + d
 SELECT first_name 이름
-        , CASE WHEN department_id = 10 THEN 'Administration'
+        , CASE 
+              WHEN department_id = 10 THEN 'Administration'
               WHEN department_id = 20 THEN 'Marketing'
               WHEN department_id = 30 THEN 'Purchasing'
               WHEN department_id = 40 THEN 'Human Resources'
@@ -679,7 +692,7 @@ FROM employees;
 -- COUNT( 컬럼명 )
 -- : 컬럼을 지정하여 NULL을 제외한 데이터 개수를 반환하는 함수
 -- : NULL 이 없는 데이터라면 어떤 컬럼을 지정하더라도 개수가 같기 떄문에,
---   일반적으로, COUNT(*) 로 개수를 구한다.
+--   일반적으로, COUNT(*) 로 개수를 구한다. NULL포함
 -- 다음 <예시> 와 같이 테이블 EMPLOYEES 의 사원 수를 구하는 SQL 문을 작성하시오.
 SELECT COUNT(*) 사원수
         ,COUNT(commission_pct) 커미션받는사원수
@@ -841,6 +854,8 @@ COMMENT ON COLUMN MS_STUDENT.ETC IS '특이사항';
 -------------------------------------- 57.
 
 -- MS_STUDENT 테이블에 데이터를 삽입하는 SQL 문을 작성하시오.
+-- INSERT INTO 와 VALUES의 값 입력의 순서는 동일해야 된다.
+-- 속성의 나열을 생략가능하다. 다만 모든 속성의 값을 입력해야만 된다.
 INSERT INTO MS_STUDENT ( ST_NO,NAME,BIRTH,EMAIL,ADDRESS,MJ_NO,
                         GENDER,STATUS,ADM_DATE,GRD_DATE,REG_DATE,
                         UPD_DATE,ETC)
@@ -887,6 +902,7 @@ SELECT * FROM MS_STUDENT;
 -------------------------------------- 59.
 
 -- MS_STUDENT 테이블에 데이터를 수정하는 SQL 문을 작성하시오.
+-- UPDATE, DELETE는 꼭 WHERE와 같이 써서 조건을 걸어준다.
 /*
     UPDATE 테이블명
         SET 컬럼1 = 변경할 값,
@@ -991,3 +1007,18 @@ UPDATE MS_STUDENT
 -- 지정한 값만 입력/수정 가능하도록 제한하는 조건
 -- 지정한 값이 아닌 다른 값을 입력/수정하는 경우
 -- "체크 제약조건이 위배되었습니다" 에러 발생
+
+-------------------------------------- 66.
+-------------------------------------- 67.
+-------------------------------------- 68.
+-------------------------------------- 69.
+
+
+
+
+
+
+
+
+
+
