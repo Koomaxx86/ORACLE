@@ -430,7 +430,7 @@ FROM dual;
 -- 이름                   입사일자
 -- Steven       2003-06-17 (화) 12:00:00
 -- Neena        2005-09-21 (수) 12:00:00
--- Lex          2001-01-13 (토) 12:00:00
+-- Lex          2001-01-13 (토) 12:00ㄹ:00
 -- Alexander    2006-01-03 (화) 12:00:00
 -- Bruce        2007-05-21 (월) 12:00:00
 -- David        2005-06-25 (토) 12:00:00
@@ -693,6 +693,7 @@ FROM employees;
 -- : 컬럼을 지정하여 NULL을 제외한 데이터 개수를 반환하는 함수
 -- : NULL 이 없는 데이터라면 어떤 컬럼을 지정하더라도 개수가 같기 떄문에,
 --   일반적으로, COUNT(*) 로 개수를 구한다. NULL포함
+
 -- 다음 <예시> 와 같이 테이블 EMPLOYEES 의 사원 수를 구하는 SQL 문을 작성하시오.
 SELECT COUNT(*) 사원수
         ,COUNT(commission_pct) 커미션받는사원수
@@ -700,7 +701,8 @@ SELECT COUNT(*) 사원수
 FROM employees;
 
 -------------------------------------- 49.
-
+-- MAX 최대값. 날짜데이터에 사용시 최근 값 확인
+-- MIN 최소값. 날짜데이터에 사용시 오래된 값 확인
 -- 테이블 EMPLOYEES 의 최고급여, 최저급여를 구하는 SQL 문을 작성하시오.
 SELECT MAX(salary) 최고급여
     , MIN(salary) 최저급여
@@ -783,8 +785,6 @@ ALTER TABLE MS_STUDENT DROP COLUMN STATUS;
 ALTER TABLE MS_STUDENT DROP COLUMN ADM_DATE;
 ALTER TABLE MS_STUDENT DROP COLUMN GRD_DATE;
 
-DESC MS_STUDENT;
-
 -------------------------------------- 54.
 
 -- MS_STUDENT 테이블의 주민번호 속성을 생년월일 속성으로 수정하는 SQL 문을 작성하시오.
@@ -795,7 +795,6 @@ ALTER TABLE MS_STUDENT RENAME COLUMN CTZ_NO TO BIRTH;
 -- : 속성변경
 ALTER TABLE MS_STUDENT MODIFY BIRTH DATE;
 COMMENT ON COLUMN MS_STUDENT.BIRTH IS '생년월일';
-
 -- 속성 변경 - 타입변경
 ALTER TABLE MS_STUDENT MODIFY BIRTH DATE;
 -- 속성 변경 - NULL 여부변경

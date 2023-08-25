@@ -353,7 +353,7 @@ SELECT *
 FROM employee e
 WHERE e.dept_code = d.dept_id
 )
-ORDER BY dept_id;;
+ORDER BY dept_id;
 
 -------------------------------------- 85.
 -- EMPLOYEE 와 DEPARTMENT 의 DEPT_CODE 와 DEPT_ID 속성이 일치하는 행이 존재하지 않는 경우, 테이블 DEPARTMENT 의 데이터를 조회하는 SQL 문을 작성하시오.
@@ -542,6 +542,7 @@ WHERE emp_id IN (
 );
     
 -------------------------------------- 93.
+
 -- 사원(매니저가 아닌)만 조회하시오
 SELECT e.emp_id 사원번호
         ,e.emp_name 직원명
@@ -592,6 +593,7 @@ WHERE emp_id NOT IN (
 );    
     
 -------------------------------------- 95.
+
 -- 조인을 이용하여, <예시> 와 같이 출력되는 SQL 문을 완성하시오.(단, CASE 키워드를 이용하시오.)    
 SELECT e.emp_id 사원번호
         ,e.emp_name 직원명
@@ -683,5 +685,34 @@ FROM employee e
         LEFT JOIN department d ON e.dept_code = d.dept_id
         JOIN job j USING(job_code);
 
+----------------------------------------------------------------------------  
+
+-- 데이터 사전 뷰
+SELECT *
+FROM user_tables
+WHERE table_name like '%EMP%';
         
+-- 뷰 생성하기
+-- 사원, 부서 테이블 조인한 결과를 뷰로 생성
+-- 1. 사원, 부서 테이블 조인
+SELECT e.emp_id
+        ,e.emp_name
+        ,d.dept_id
+        ,d.detp_title
+FROM employee e
+        LEFT JOIN department d ON e.dept_code = d.dept_id;
         
+-- 2. 뷰로 생성
+CREATE VIEW v_emp_dept AS
+SELECT e.emp_id
+        ,e.emp_name
+        ,d.dept_id
+        ,d.dept_title
+FROM employee e
+        LEFT JOIN department d ON e.dept_code = d.dept_id;
+
+-- 3. 뷰조회
+SELECT * FROM v_emp_dept;
+        
+-- 4. 뷰 삭제
+DROP VIEW v_emp_dept;
