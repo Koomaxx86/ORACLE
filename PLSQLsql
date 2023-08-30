@@ -189,18 +189,22 @@ EXECUTE pro_print();
 
 -- 함수 생성
 -- 사원번호로 부서명을 구하는 함수
+-- CREATE 생성명령
+-- OR REPLACE 동일한 함수가 있을경우 대체하라는 명령
+-- FUNCTION 함수
 CREATE OR REPLACE FUNCTION get_dept_title( p_emp_id NUMBER )
-RETURN VARCHAR2
-IS
+RETURN VARCHAR2 -- varchar2로 리턴한다
+IS -- 함수의 시작
+-- 담을변수선언 경로 %TYPE(title와 동일한 타입사용)
     out_title department.dept_title%TYPE ;
-BEGIN
-    SELECT dept_title
-      INTO out_title
+BEGIN -- 함수 실행
+    SELECT dept_title -- 조건에 맞는 값 선택
+      INTO out_title -- 위에서 선택된 값을 저장
       FROM employee e
           ,department d
     WHERE e.dept_code = d.dept_id
       AND e.emp_id = p_emp_id;
-    RETURN out_title;
+    RETURN out_title; -- into에서 저장한 값을 리턴
 END;
 /
 

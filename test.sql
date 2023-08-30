@@ -30,9 +30,43 @@ MAXVALUE 100000;
 
 -- 1-7
 INSERT INTO BOARD (BOARD_NO, TITLE, CONTENT, WRITER, REG_DATE, UPD_DATE)
-VALUES (1, 제목01, 내용01
+VALUES (1, '제목01', '내용01', '김조은', TO_DATE('22/12/27', 'YY,MM,DD'), TO_DATE('22/12/27', 'YY,MM,DD'));
+INSERT INTO BOARD (BOARD_NO, TITLE, CONTENT, WRITER, REG_DATE, UPD_DATE)
+VALUES (2, '제목02', '내용02', '김조은', TO_DATE('22/12/27', 'YY,MM,DD'), TO_DATE('22/12/27', 'YY,MM,DD'));
 
+-- 1-8
+UPDATE BOARD
+    SET TITLE = '수정01'
+        ,CONTENT = '수정01'
+WHERE BOARD_NO=1;
 
+UPDATE BOARD
+    SET TITLE = '수정02'
+        ,CONTENT = '수정02'
+WHERE BOARD_NO=2;0.
 
+-- 1-9
 SELECT *
-FROM BOARD;
+FROM BOARD
+WHERE WRITER LIKE '김%';
+
+-- 1-10
+DELETE
+FROM BOARD
+WHERE WRITER = '김조은';
+
+-- 2-1
+CREATE OR REPLACE FUNCTION get_dept_title( emp_id NUMBER )
+RETURN VARCHAR2 
+IS 
+    out_title department.dept_title%TYPE ;
+BEGIN 
+    SELECT dept_title 
+      INTO out_title 
+      FROM employee e
+          ,department d
+    WHERE e.dept_code = d.dept_id
+      AND e.emp_id = emp_id;
+    RETURN out_title; -- 
+END;
+/
