@@ -18,7 +18,8 @@ imp userid=system/123456 file=D:\Jung\SQL\community.dmp fromuser=joeun touser=jo
 -- exp userid=생성계정/비밀번호 file=파일경로 log=로그파일경로
 -- 생성계정은 import 할 떄 fromuser로 쓰인다.
 
--- 사용 중인 계정(‘joeun’)이 소유하고 있는 데이터를 “community.dmp” 덤프파일로 export 하는 명령어를 작성하시오.
+-- 사용 중인 계정(‘joeun’)이 소유하고 있는 데이터를 “community.dmp” 
+-- 덤프파일로 export 하는 명령어를 작성하시오.
 exp userid=joeun/123456 file=D:\Jung\SQL\community2.dmp log=D:\Jung\SQL\community2.log
 
 -------------------------------------- 72.

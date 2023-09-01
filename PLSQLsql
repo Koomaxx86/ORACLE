@@ -195,8 +195,7 @@ EXECUTE pro_print();
 CREATE OR REPLACE FUNCTION get_dept_title( p_emp_id NUMBER )
 RETURN VARCHAR2 -- varchar2로 리턴한다
 IS -- 함수의 시작
--- 담을변수선언 경로 %TYPE(title와 동일한 타입사용)
-    out_title department.dept_title%TYPE ;
+    out_title department.dept_title%TYPE ; -- into에서 사용한 변수 선언
 BEGIN -- 함수 실행
     SELECT dept_title -- 조건에 맞는 값 선택
       INTO out_title -- 위에서 선택된 값을 저장
@@ -212,6 +211,7 @@ END;
 SELECT emp_name 사원명
       ,get_dept_title(emp_id) 부서명
 FROM employee;
+
 
 -- 블록 에서 함수 실행
 DECLARE
@@ -243,7 +243,7 @@ SELECT emp_id, emp_name,
       func_sal_tax( salary ) 세후급여
 FROM employee;
 
-
+----------------------------------------------------------------------------
 
 -- board 테이블 생성
 CREATE TABLE board (
@@ -255,6 +255,7 @@ CREATE TABLE board (
     ,upd_date DATE DEFAULT sysdate NOT NULL
 );
 
+----------------------------------------------------------------------------
 
 -- SEQ_BOARD 시퀀스 생성
 DROP SEQUENCE SEQ_BOARD;
@@ -264,29 +265,39 @@ START WITH 1
 MINVALUE 1
 MAXVALUE 10000;
 
+----------------------------------------------------------------------------
+
 -- 프로시저 (파라미터 사용)
 -- 입력 : 사원번호, 제목, 내용
 -- board 테이블에 사원명으로 글쓰기를 하는 프로시저
 CREATE OR REPLACE PROCEDURE pro_emp_write 
+-- 매개변수 선언
 (
-    IN_EMP_ID IN employee.emp_id%TYPE,
-    IN_TITLE IN VARCHAR2 DEFAULT '제목없음',
+    -- IN : in방식 파라미터
+    -- DEFAULT : 해당 타입으로 지정시 인자가 안넘어오면 DEFAULT 이후에 값이 자동셋팅
+    IN_EMP_ID IN employee.emp_id%TYPE, -- 사원번호 매개변수
+    IN_TITLE IN VARCHAR2 DEFAULT '제목없음', 
     IN_CONTENT IN VARCHAR2 DEFAULT '내용없음'
 )
 IS
     V_EMP_NAME employee.emp_name%TYPE;
-BEGIN
+BEGIN 
+    -- 사원명 조회
     SELECT emp_name INTO V_EMP_NAME
     FROM employee
     WHERE emp_id = IN_EMP_ID;
     
+    -- board 에 입력
     INSERT INTO board( board_no, title, writer, content )
+    -- BOARD NO 대신 SEQ_BOARD시퀀스 입력.
+    -- nextval은 다음번호를 자동으로 입력해준다.
     VALUES ( SEQ_BOARD.nextval,  IN_TITLE, V_EMP_NAME, IN_CONTENT );
 
 END;
 /
 
--- 
+----------------------------------------------------------------------------
+
 EXECUTE pro_emp_write( '200', '제목1', '내용1' );
 EXECUTE pro_emp_write( '201', '제목2' );
 EXECUTE pro_emp_write( '202' );
@@ -294,6 +305,7 @@ EXECUTE pro_emp_write( '202' );
 
 SELECT * FROM board;
 
+----------------------------------------------------------------------------
 
 -- OUT 파라미터로 프로시저 사용하기
 CREATE OR REPLACE PROCEDURE pro_out_emp (
@@ -322,6 +334,7 @@ BEGIN
 END;
 /
 
+----------------------------------------------------------------------------
 
 -- 프로시저로 OUT 파라미터 2개 이상 사용하기
 CREATE OR REPLACE PROCEDURE pro_out_mul (
@@ -340,6 +353,8 @@ BEGIN
     OUT_JOB_CODE := V_EMP.job_code;
 END;
 /
+
+----------------------------------------------------------------------------
 
 -- 프로시저 호출
 -- 1) 매개변수가 없거나, IN 매개변수 만 : EXECUTE 프로시저명(인자1, 인자2);
